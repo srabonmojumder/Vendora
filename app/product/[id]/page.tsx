@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import ProductDetails from "@/components/ProductDetails";
 import ProductCard from "@/components/ProductCard";
+import RecentlyViewed from "@/components/RecentlyViewed";
 import Reveal from "@/components/Reveal";
 import { allProducts, getProductById, getRelatedProducts } from "@/lib/data";
 
@@ -57,6 +58,8 @@ export default async function ProductPage({
           ))}
         </div>
       </section>
+
+      <RecentlyViewed current={product} />
     </main>
   );
 }

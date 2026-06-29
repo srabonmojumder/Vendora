@@ -16,12 +16,26 @@ import { useStore } from "@/context/StoreContext";
 import ProductGallery from "./ProductGallery";
 
 export default function ProductDetails({ product }: { product: Product }) {
-  const { addToCart, toggleWishlist, isInWishlist, openCart } = useStore();
+  const { addToCart, toggleWishlist, isInWishlist, openCart, addToast } =
+    useStore();
   const [qty, setQty] = useState(1);
   const currency = product.currency ?? "DHS";
   const onSale = product.regularPrice != null;
   const wished = isInWishlist(product.id);
   const gallery = product.gallery?.length ? product.gallery : [product.image];
+
+  const handleAddToCart = () => {
+    addToCart(product, qty);
+    addToast(`${product.name} added to cart`);
+  };
+
+  const handleWishlist = () => {
+    toggleWishlist(product);
+    addToast(
+      wished ? "Removed from wishlist" : "Added to wishlist",
+      wished ? "info" : "success"
+    );
+  };
 
   return (
     <section className="container-x py-14 lg:py-20">
@@ -98,14 +112,14 @@ export default function ProductDetails({ product }: { product: Product }) {
             </div>
 
             <button
-              onClick={() => addToCart(product, qty)}
+              onClick={handleAddToCart}
               className="btn-primary h-12 flex-1 sm:flex-none"
             >
               Add To Cart
             </button>
 
             <button
-              onClick={() => toggleWishlist(product)}
+              onClick={handleWishlist}
               aria-label="Add to wishlist"
               className={`flex h-12 w-12 items-center justify-center border transition ${
                 wished

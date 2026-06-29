@@ -47,10 +47,45 @@ function ActionIcon({
 }
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart, toggleWishlist, isInWishlist } = useStore();
+  const {
+    addToCart,
+    toggleWishlist,
+    isInWishlist,
+    addToCompare,
+    removeFromCompare,
+    isInCompare,
+    compareCount,
+    addToast,
+  } = useStore();
   const currency = product.currency ?? "DHS";
   const onSale = product.regularPrice != null;
   const wished = isInWishlist(product.id);
+  const inCompare = isInCompare(product.id);
+
+  const handleWishlist = () => {
+    toggleWishlist(product);
+    addToast(
+      wished ? "Removed from wishlist" : "Added to wishlist",
+      wished ? "info" : "success"
+    );
+  };
+
+  const handleCompare = () => {
+    if (inCompare) {
+      removeFromCompare(product.id);
+      addToast("Removed from compare", "info");
+    } else if (compareCount >= 4) {
+      addToast("You can compare up to 4 products", "info");
+    } else {
+      addToCompare(product);
+      addToast("Added to compare");
+    }
+  };
+
+  const handleAdd = () => {
+    addToCart(product);
+    addToast(`${product.name} added to cart`);
+  };
 
   return (
     <div className="group flex flex-col">
@@ -77,14 +112,14 @@ export default function ProductCard({ product }: { product: Product }) {
           <ActionIcon
             label="Add to wishlist"
             active={wished}
-            onClick={() => toggleWishlist(product)}
+            onClick={handleWishlist}
           >
             <Heart className={`h-4 w-4 ${wished ? "fill-current" : ""}`} />
           </ActionIcon>
-          <ActionIcon label="Compare" onClick={() => addToCart(product)}>
+          <ActionIcon label="Compare" active={inCompare} onClick={handleCompare}>
             <Repeat className="h-4 w-4" />
           </ActionIcon>
-          <ActionIcon label="Quick add to cart" onClick={() => addToCart(product)}>
+          <ActionIcon label="Quick add to cart" onClick={handleAdd}>
             <Plus className="h-4 w-4" />
           </ActionIcon>
         </div>
