@@ -33,7 +33,8 @@ export default function CheckoutSuccessPage() {
     );
   }
 
-  const { id, items, subtotal, shipping, total, details, createdAt } = lastOrder;
+  const { id, items, subtotal, discount, shipping, total, couponCode, details, createdAt } =
+    lastOrder;
   const date = new Date(createdAt).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
@@ -90,6 +91,12 @@ export default function CheckoutSuccessPage() {
             </ul>
             <div className="space-y-2 border-t border-black/10 px-6 py-4 text-[14px]">
               <Row label="Subtotal" value={`DHS ${subtotal.toLocaleString()}`} />
+              {discount > 0 && (
+                <Row
+                  label={`Discount${couponCode ? ` (${couponCode})` : ""}`}
+                  value={`− DHS ${discount.toLocaleString()}`}
+                />
+              )}
               <Row label="Shipping" value={shipping === 0 ? "Free" : `DHS ${shipping}`} />
               <div className="flex items-center justify-between border-t border-black/10 pt-3 text-[16px]">
                 <span className="font-semibold text-heading-soft">Total</span>

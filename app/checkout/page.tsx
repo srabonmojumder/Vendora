@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { CreditCard, Wallet, Banknote, Lock, ShoppingBag } from "lucide-react";
 import PageBanner from "@/components/PageBanner";
+import CouponField from "@/components/CouponField";
+import CardPayment from "@/components/CardPayment";
 import { useStore } from "@/context/StoreContext";
 import type { CheckoutDetails, PaymentMethod } from "@/lib/types";
 
@@ -40,9 +42,20 @@ const emptyForm: CheckoutDetails = {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, cartSubtotal, shippingFee, cartTotal, placeOrder } = useStore();
+  const {
+    cart,
+    cartSubtotal,
+    shippingFee,
+    discountAmount,
+    cartTotal,
+    coupon,
+    placeOrder,
+    addToast,
+  } = useStore();
   const [form, setForm] = useState<CheckoutDetails>(emptyForm);
   const [submitting, setSubmitting] = useState(false);
+  const [cardValid, setCardValid] = useState(false);
+  const [cardAttempted, setCardAttempted] = useState(false);
 
   const set = <K extends keyof CheckoutDetails>(key: K, value: CheckoutDetails[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -50,6 +63,12 @@ export default function CheckoutPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
+    // Card payment requires valid card details before placing the order.
+    if (form.paymentMethod === "card" && !cardValid) {
+      setCardAttempted(true);
+      addToast("Please enter valid card details.", "info");
+      return;
+    }
     setSubmitting(true);
     // Simulate a brief payment-processing delay, then confirm.
     const order = placeOrder(form);
@@ -157,15 +176,12 @@ export default function CheckoutPage() {
                 })}
               </div>
 
-              {/* Card fields (visual only, shown when card selected) */}
+              {/* Card details with validation + live brand detection */}
               {form.paymentMethod === "card" && (
-                <div className="mt-5 grid grid-cols-1 gap-5 border border-black/10 bg-[#fafafa] p-5 sm:grid-cols-2">
-                  <div className="sm:col-span-2">
-                    <Field label="Card Number" placeholder="1234 5678 9012 3456" required={false} />
-                  </div>
-                  <Field label="Expiry (MM/YY)" placeholder="08/28" required={false} />
-                  <Field label="CVC" placeholder="123" required={false} />
-                </div>
+                <CardPayment
+                  onValidityChange={setCardValid}
+                  showErrors={cardAttempted}
+                />
               )}
             </div>
           </div>
@@ -195,8 +211,19 @@ export default function CheckoutPage() {
               ))}
             </ul>
 
+            <div className="mt-4 border-t border-black/10 pt-4">
+              <CouponField />
+            </div>
+
             <div className="mt-4 space-y-2 border-t border-black/10 pt-4 text-[14px]">
               <Row label="Subtotal" value={`DHS ${cartSubtotal.toLocaleString()}`} />
+              {discountAmount > 0 && (
+                <Row
+                  label={`Discount${coupon ? ` (${coupon.code})` : ""}`}
+                  value={`− DHS ${discountAmount.toLocaleString()}`}
+                  accent
+                />
+              )}
               <Row
                 label="Shipping"
                 value={shippingFee === 0 ? "Free" : `DHS ${shippingFee}`}
@@ -227,11 +254,21 @@ export default function CheckoutPage() {
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-body">{label}</span>
-      <span className="font-medium text-heading-soft">{value}</span>
+      <span className={`font-medium ${accent ? "text-brand" : "text-heading-soft"}`}>
+        {value}
+      </span>
     </div>
   );
 }
