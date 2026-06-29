@@ -22,7 +22,7 @@ export default function CompareBar() {
         <ul className="flex flex-1 items-center gap-3 overflow-x-auto no-scrollbar">
           {compare.map((p) => (
             <li key={p.id} className="relative shrink-0">
-              <div className="relative h-12 w-11 overflow-hidden bg-[#f6f6f6]">
+              <div className="relative h-12 w-11  bg-[#f6f6f6]">
                 <Image src={p.image} alt={p.name} fill sizes="44px" className="object-cover" />
               </div>
               <button
