@@ -43,10 +43,23 @@ export interface Order {
   id: string;
   items: CartItem[];
   subtotal: number;
+  discount: number;
   shipping: number;
   total: number;
+  couponCode?: string;
   details: CheckoutDetails;
   createdAt: string;
+}
+
+export interface Coupon {
+  code: string;
+  discountPct: number;
+}
+
+export interface Toast {
+  id: number;
+  message: string;
+  type: "success" | "info";
 }
 
 export type ProductTag = "all" | "acne-prone" | "hypersensitive";
