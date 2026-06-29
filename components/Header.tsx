@@ -2,21 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Menu,
-  Search,
-  Heart,
-  User,
-  ShoppingBag,
-  ChevronDown,
-} from "lucide-react";
+import { Menu, Search, Heart, User, ShoppingBag } from "lucide-react";
 import MenuDrawer from "./MenuDrawer";
 import Logo from "./Logo";
+import Dropdown from "./Dropdown";
 import { useStore } from "@/context/StoreContext";
 
 export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [currency, setCurrency] = useState("AED");
+  const [language, setLanguage] = useState("English");
   const { cartCount, wishlistCount, openCart, openSearch } = useStore();
 
   useEffect(() => {
@@ -57,12 +53,22 @@ export default function Header() {
 
           {/* Right — utilities */}
           <div className="flex flex-1 items-center justify-end gap-3 sm:gap-5">
-            <button className="hidden items-center gap-1 text-[12px] font-medium text-heading-muted transition hover:text-brand lg:flex">
-              AED <ChevronDown className="h-3.5 w-3.5" />
-            </button>
-            <button className="hidden items-center gap-1 text-[12px] font-medium text-heading-muted transition hover:text-brand lg:flex">
-              English <ChevronDown className="h-3.5 w-3.5" />
-            </button>
+            <div className="hidden lg:block">
+              <Dropdown
+                label="Currency"
+                options={["AED", "USD", "EUR", "GBP"]}
+                value={currency}
+                onChange={setCurrency}
+              />
+            </div>
+            <div className="hidden lg:block">
+              <Dropdown
+                label="Language"
+                options={["English", "العربية", "Français"]}
+                value={language}
+                onChange={setLanguage}
+              />
+            </div>
 
             <button
               onClick={openSearch}
