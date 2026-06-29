@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Plus, Minus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import PageBanner from "@/components/PageBanner";
+import CouponField from "@/components/CouponField";
 import { useStore } from "@/context/StoreContext";
 
 export default function CartPage() {
@@ -11,7 +12,9 @@ export default function CartPage() {
     cart,
     cartSubtotal,
     shippingFee,
+    discountAmount,
     cartTotal,
+    coupon,
     updateQty,
     removeFromCart,
     clearCart,
@@ -144,19 +147,35 @@ export default function CartPage() {
                   DHS {cartSubtotal.toLocaleString()}
                 </span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex items-center justify-between border-b border-black/10 py-3 text-[14px]">
+                  <span className="text-body">
+                    Discount {coupon ? `(${coupon.code})` : ""}
+                  </span>
+                  <span className="font-medium text-brand">
+                    − DHS {discountAmount.toLocaleString()}
+                  </span>
+                </div>
+              )}
               <div className="flex items-center justify-between border-b border-black/10 py-3 text-[14px]">
                 <span className="text-body">Shipping</span>
                 <span className="font-medium text-heading-soft">
                   {shippingFee === 0 ? "Free" : `DHS ${shippingFee}`}
                 </span>
               </div>
-              <div className="flex items-center justify-between py-4 text-[16px]">
+
+              {/* Coupon */}
+              <div className="py-4">
+                <CouponField />
+              </div>
+
+              <div className="flex items-center justify-between border-t border-black/10 py-4 text-[16px]">
                 <span className="font-semibold text-heading-soft">Total</span>
                 <span className="font-semibold text-brand">
                   DHS {cartTotal.toLocaleString()}
                 </span>
               </div>
-              <Link href="/checkout" className="btn-primary mt-4 w-full">
+              <Link href="/checkout" className="btn-primary mt-2 w-full">
                 Proceed To Checkout <ArrowRight className="h-4 w-4" />
               </Link>
             </aside>
