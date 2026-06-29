@@ -4,6 +4,7 @@ import PromoBanner from "@/components/PromoBanner";
 import ProductGrid from "@/components/ProductGrid";
 import TrendyCTA from "@/components/TrendyCTA";
 import BlogSection from "@/components/BlogSection";
+import ValueProps from "@/components/ValueProps";
 import { newArrivals, mostWanted } from "@/lib/data";
 
 export default function HomePage() {
@@ -12,6 +13,8 @@ export default function HomePage() {
         <Hero />
 
         <CategoryCarousel />
+
+        <ValueProps />
 
         {/* Promo banner 1 — mint */}
         <PromoBanner

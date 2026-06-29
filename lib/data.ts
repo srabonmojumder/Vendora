@@ -197,10 +197,10 @@ export const navLinks: NavLink[] = [
     label: "HOME",
     children: [
       { label: "Home 01", href: "/" },
-      { label: "Home 02", href: "/" },
-      { label: "Home 03", href: "/" },
-      { label: "Home 04", href: "/" },
-      { label: "Home 05", href: "/" },
+      { label: "Home 02", href: "/home-2" },
+      { label: "Home 03", href: "/home-3" },
+      { label: "Home 04", href: "/home-4" },
+      { label: "Home 05", href: "/home-5" },
     ],
   },
   {
