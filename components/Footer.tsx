@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   MapPin,
@@ -8,6 +9,7 @@ import {
   Facebook,
   Instagram,
   ArrowRight,
+  Check,
 } from "lucide-react";
 import Logo from "./Logo";
 
@@ -67,6 +69,8 @@ function LinkColumn({ title, links }: { title: string; links: FooterLink[] }) {
 const payments = ["Visa", "Mastercard", "PayPal", "Amazon"];
 
 export default function Footer() {
+  const [subscribed, setSubscribed] = useState(false);
+
   return (
     <footer className="border-t border-black/10 bg-white">
       <div className="container-x py-16">
@@ -116,12 +120,17 @@ export default function Footer() {
             </p>
             <form
               className="mt-5 flex items-center border-b border-black/20 focus-within:border-brand"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={(e) => {
+                e.preventDefault();
+                setSubscribed(true);
+                e.currentTarget.reset();
+              }}
             >
               <input
                 type="email"
                 required
                 placeholder="Your email address"
+                onChange={() => subscribed && setSubscribed(false)}
                 className="w-full bg-transparent py-2 text-[14px] text-heading-soft placeholder:text-body focus:outline-none"
               />
               <button
@@ -132,6 +141,12 @@ export default function Footer() {
                 <ArrowRight className="h-5 w-5" />
               </button>
             </form>
+
+            {subscribed && (
+              <p className="mt-3 flex items-center gap-2 text-[13px] font-medium text-brand">
+                <Check className="h-4 w-4" /> Thanks for subscribing!
+              </p>
+            )}
 
             <div className="mt-6 flex items-center gap-4">
               {[

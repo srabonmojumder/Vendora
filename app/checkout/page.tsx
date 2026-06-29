@@ -179,7 +179,7 @@ export default function CheckoutPage() {
             <ul className="divide-y divide-black/[0.07]">
               {cart.map(({ product, qty }) => (
                 <li key={product.id} className="flex items-center gap-3 py-3">
-                  <div className="relative h-16 w-14 shrink-0 overflow-hidden bg-[#f6f6f6]">
+                  <div className="relative h-16 w-14 shrink-0  bg-[#f6f6f6]">
                     <Image src={product.image} alt={product.name} fill sizes="56px" className="object-cover" />
                     <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold text-white">
                       {qty}
