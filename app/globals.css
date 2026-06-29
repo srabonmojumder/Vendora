@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand: #004132;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: #004132;
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-container px-5 sm:px-8 lg:px-10;
+  }
+
+  /* Square premium button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-brand px-8 py-4
+           text-[11px] font-medium uppercase tracking-button text-white
+           transition-all duration-300 hover:bg-brand-dark hover:-translate-y-0.5
+           hover:shadow-lg hover:shadow-brand/20 active:translate-y-0;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border border-brand
+           bg-transparent px-8 py-4 text-[11px] font-medium uppercase
+           tracking-button text-brand transition-all duration-300
+           hover:bg-brand hover:text-white;
+  }
+
+  .section-title {
+    @apply font-display text-brand;
+  }
+
+  .hairline {
+    @apply border-0 border-t border-black/10;
+  }
+}
+
+@layer utilities {
+  /* Scroll reveal — toggled by IntersectionObserver via .is-visible */
+  .reveal {
+    opacity: 0;
+    transform: translateY(34px);
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 {
+    transition-delay: 0.1s;
+  }
+  .reveal-delay-2 {
+    transition-delay: 0.2s;
+  }
+  .reveal-delay-3 {
+    transition-delay: 0.3s;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Swiper overrides — keep pagination on-brand */
+.swiper-pagination-bullet {
+  background: #004132 !important;
+  opacity: 0.25;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+}
